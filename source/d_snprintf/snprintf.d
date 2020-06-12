@@ -108,7 +108,7 @@ module d_snprintf.snprintf;
  *   usually expose bugs in system implementations rather than in ours :-)
  */
 
-version = SNPRINTF_TEST;
+//version = SNPRINTF_TEST;
 
 import d_snprintf.vararg;
 
