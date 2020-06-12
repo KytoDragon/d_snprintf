@@ -111,6 +111,7 @@ module d_snprintf.snprintf;
 //version = SNPRINTF_TEST;
 
 import d_snprintf.vararg;
+public import d_snprintf.vararg : va_list, va_start, va_copy, va_end;
 
 version (SNPRINTF_TEST) {
     import core.stdc.math : pow;
