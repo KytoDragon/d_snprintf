@@ -1,0 +1,17 @@
+{
+	"authors": [
+		"Kyto"
+	],
+	"copyright": "Copyright © 2020 KytoDragon, Copyright © 2008 Holger Weiß, Copyright © 1995 Patrick Powell",
+	"description": "Port of C99-snprintf",
+	"homepage": "https://github.com/KytoDragon/d_snprintf/",
+	"license": "MIT",
+	"name": "d_snprintf",
+	"importPaths": [
+		"source/"
+	],
+	"sourcePaths": [
+		"source/"
+	],
+	"targetType": "sourceLibrary"
+}
