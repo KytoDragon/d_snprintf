@@ -3,10 +3,10 @@ This version has no dependencies on other external libraries or the C standard l
 It does use D's TypeInfo inorder to access varargs in a typesafe and convenient manner. All Code is nothrow and @nogc.
 
 This library defines snprintf and vsnprintf as well as a few templates that allow you to easely define a version of (v)asprinf, (v)fprintf and (v)printf that use a specific function to allocate memory or write to a file.
-An example using C standard library functions:
+An example using C standard library functions (see d_snprintf/test.d):
 
 ```D
-import d_snprintf.snprintf;
+import d_snprintf;
 import core.stdc.stdio : FILE, stdout, fwrite;
 import core.stdc.stdlib : malloc;
 
