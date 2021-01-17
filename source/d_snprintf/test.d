@@ -1,6 +1,6 @@
 module d_snprintf.test;
 
-//version = SNPRINTF_TEST;
+// version = SNPRINTF_TEST;
 
 version (SNPRINTF_TEST) {
 
@@ -9,16 +9,28 @@ import d_snprintf;
 import core.stdc.math : pow;
 import core.stdc.string : strcmp;
 import core.stdc.stdlib : malloc;
-import core.stdc.stdio : sprintf, FILE, stdout, fwrite;
+import core.stdc.stdio : sprintf, FILE, fwrite;
+
+nothrow:
+@nogc:
+
+version(D_BetterC) {
+    version (Windows) {
+        // Workaround for https://issues.dlang.org/show_bug.cgi?id=18816 and https://issues.dlang.org/show_bug.cgi?id=19933
+        private extern extern(C) FILE* __acrt_iob_func(int);
+        shared FILE* stdout;
+    } else {
+        import core.stdc.stdio : stdout;
+    }
+} else {
+    import core.stdc.stdio : stdout;
+}
 
 enum INT_MIN = int.min;
 enum INT_MAX = int.max;
 enum LONG_MIN = long.max;
 enum LONG_MAX = long.min;
 enum UINT_MAX = uint.max;
-
-nothrow:
-@nogc:
 
 // wrappers for file writing and memory allocation
 void write_file(void* p_file, ubyte[] data) {
@@ -33,8 +45,8 @@ void* alloc_func(size_t size) {
 alias asprintf = rpl_asprintf!alloc_func;
 alias vasprintf = rpl_vasprintf!alloc_func;
 
-int fprintf(FILE* file, string format, ...) {
-    mixin va_start;
+int fprintf(A...)(FILE* file, string format, A a) {
+    mixin va_start!a;
     return rpl_vfprintf!write_file(cast(void*)file, format, va_args);
 }
 
@@ -42,8 +54,8 @@ int vfprintf(FILE* file, string format, va_list ap) {
     return rpl_vfprintf!write_file(cast(void*)file, format, ap);
 }
 
-int printf(string format, ...) {
-    mixin va_start;
+int printf(A...)(string format, A a) {
+    mixin va_start!a;
     return rpl_vfprintf!write_file(cast(void*)stdout, format, va_args);
 }
 
@@ -55,8 +67,22 @@ int vprintf(string format, va_list ap) {
 // NOTE: Their will always be differences due to
 //       - floating-point accuracy (e.q. 9.899999895424116 vs 9.899999895424115)
 //       - varying feature support (e.q. no support for the ' prefix on Windows)
-//       - "impementation dependent" formats (e.q. pointers, 00007FF666AECBC0 vs 0x7ff666aecbc0)
-int main() {
+//       - "implementation dependent" formats (e.q. pointers, 00007FF666AECBC0 vs 0x7ff666aecbc0)
+version(D_BetterC) {
+    extern(C) int main() {
+        version (Windows) {
+            // Workaround for https://issues.dlang.org/show_bug.cgi?id=18816 and https://issues.dlang.org/show_bug.cgi?id=19933
+            stdout = __acrt_iob_func(1);
+        }
+        return test();
+    }
+} else {
+    int main() {
+        return test();
+    }
+}
+
+int test() {
     __gshared const string[] float_fmt = [
         /* "%E" and "%e" formats. */
         "%.16e",

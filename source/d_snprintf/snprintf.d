@@ -505,7 +505,7 @@ int rpl_vsnprintf(alias file_func)(char[] str, string format, va_list args, void
                         break;
                     case 'c':
                         char cvalue;
-                        if (get_type(args) is typeid(char)) {
+                        if (va_get_type(args) is va_get_type!(char)) {
                             cvalue = va_arg!(char)(args);
                         } else {
                             cvalue = cast(char)get_any_int(args);
@@ -1157,15 +1157,15 @@ real mypow10(int exponent) {
 
 public:
 
-int rpl_snprintf(char[] str, string format, ...) {
-    mixin va_start;
+int rpl_snprintf(A...)(char[] str, string format, A a) {
+    mixin va_start!a;
 
     int len = rpl_vsnprintf!dummy_file_func(str, format, va_args);
     return len;
 }
 
-int rpl_fprintf(alias file_func)(void* file, string format, ...) {
-    mixin va_start;
+int rpl_fprintf(alias file_func, A...)(void* file, string format, A a) {
+    mixin va_start!a;
 
     int len = rpl_vfprintf!file_func(file, format, va_args);
     return len;
@@ -1182,8 +1182,8 @@ int rpl_vfprintf(alias file_func)(void* file, string format, va_list ap) {
     }
 }
 
-int rpl_asprintf(alias alloc_func)(char[]* ret, string format, ...) {
-    mixin va_start;
+int rpl_asprintf(alias alloc_func, A...)(char[]* ret, string format, A a) {
+    mixin va_start!a;
 
     int len = rpl_vasprintf!alloc_func(ret, format, va_args);
     return len;
