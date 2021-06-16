@@ -181,7 +181,7 @@ pragma(inline, true) bool va_is_array(Type type) {
     }
 }
 
-pragma(inline, true) Type va_remove_enum(Type type) {
+pragma(inline, true) Type va_get_enum_base_type(Type type) {
     if (va_is_enum(type)) {
         version(D_TypeInfo) {
             return strip_type_info((cast(TypeInfo_Enum)type).base);
@@ -192,7 +192,18 @@ pragma(inline, true) Type va_remove_enum(Type type) {
     return type;
 }
 
-pragma(inline, true) Type va_get_array_elem(Type type) {
+pragma(inline, true) Type va_get_pointer_target_type(Type type) {
+    if (va_is_pointer(type)) {
+        version(D_TypeInfo) {
+            return strip_type_info((cast(TypeInfo_Pointer)type).m_next);
+        } else {
+            return type & TYPE_MASK;
+        }
+    }
+    return type;
+}
+
+pragma(inline, true) Type va_get_array_elem_type(Type type) {
     assert(va_is_array(type));
     version(D_TypeInfo) {
         return type = strip_type_info((cast(TypeInfo_Array)type).value);
@@ -233,7 +244,7 @@ void* get_any_pointer(ref va_list list) {
 
 long get_any_int(ref va_list list) {
     Type type = va_get_type(list);
-    type = va_remove_enum(type);
+    type = va_get_enum_base_type(type);
     if (va_get_type!(byte) is type) {
         return va_arg!byte(list);
     } else if (va_get_type!(ubyte) is type) {
@@ -259,7 +270,7 @@ long get_any_int(ref va_list list) {
 
 real get_any_float(ref va_list list) {
     Type type = va_get_type(list);
-    type = va_remove_enum(type);
+    type = va_get_enum_base_type(type);
     if (va_get_type!(float) is type) {
         return va_arg!float(list);
     } else if (va_get_type!(double) is type) {
@@ -277,7 +288,7 @@ bool has_string_like_value(ref va_list list) {
     if (va_get_type!(string) is type) {
         return true;
     } else if (va_is_array(type)) {
-        type = va_get_array_elem(type);
+        type = va_get_array_elem_type(type);
         if (va_get_type!(char) is type || va_get_type!(byte) is type || va_get_type!(ubyte) is type) {
             return true;
         }
