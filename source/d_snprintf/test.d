@@ -2,7 +2,7 @@ module d_snprintf.test;
 
 // version = SNPRINTF_TEST;
 
-version (SNPRINTF_TEST) {
+version (SNPRINTF_TEST):
 
 import d_snprintf;
 
@@ -557,7 +557,9 @@ int test() {
             break;
         }
     }
-    return (failed == 0) ? 0 : 1;
-}
 
+    double result;
+    snscanf("0.0012345", "%lf", &result);
+
+    return (failed == 0) ? 0 : 1;
 }
