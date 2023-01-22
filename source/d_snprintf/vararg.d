@@ -264,7 +264,7 @@ long get_any_int(ref va_list list) {
     } else if (va_get_type!(bool) is type) {
         return va_arg!bool(list) ? 1 : 0;
     } else {
-        assert(false, "Tried to read a integer from varargs but found a different type.");
+        assert(false, "Tried to read an integer from varargs but found a different type.");
     }
 }
 

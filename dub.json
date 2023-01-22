@@ -2,7 +2,7 @@
 	"authors": [
 		"Kyto"
 	],
-	"copyright": "Copyright © 2020 KytoDragon, Copyright © 2008 Holger Weiß, Copyright © 1995 Patrick Powell",
+	"copyright": "Copyright © 2020-2023 KytoDragon, Copyright © 2008 Holger Weiß, Copyright © 1995 Patrick Powell",
 	"description": "Port of C99-snprintf",
 	"homepage": "https://github.com/KytoDragon/d_snprintf/",
 	"license": "MIT",
@@ -13,5 +13,15 @@
 	"sourcePaths": [
 		"source/"
 	],
-	"targetType": "sourceLibrary"
+	"targetType": "sourceLibrary",
+	"subPackages" : [
+		{
+			"name"			: "test",
+			"description"	: "Programm to test our snprintf against the system's version",
+            "targetType"    : "executable",
+			"versions": [
+				"SNPRINTF_TEST"
+			]
+		}
+    ]
 }

@@ -2,3 +2,5 @@
 /.vscode
 /*.lib
 /*.exe
+/*.pdb
+/dub.selections.json
