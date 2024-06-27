@@ -617,10 +617,10 @@ int rpl_vsnprintf(alias file_func)(char[] str, string format, va_list args, void
             len = file_len;
         }
     } else {
-        if (len < str.length)
+        if (len + 1 < str.length)
             str[len] = '\0';
-        else if (str.length > 0)
-            str[$ - 1] = '\0';
+        //else if (str.length > 0)
+        //    str[$ - 1] = '\0';
     }
         
     if (overflow || len >= INT_MAX) {
