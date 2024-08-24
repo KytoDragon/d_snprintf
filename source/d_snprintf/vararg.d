@@ -75,7 +75,7 @@ Type va_get_type(T)() {
     version(D_TypeInfo) {
         return strip_type_info(typeid(T));
     } else {
-        import std.traits : Unqual, isPointer, OriginalType;
+        import std.traits : Unqual, isPointer, OriginalType, PointerTarget;
         size_t result = 0;
         alias stripped_T = Unqual!T;
         static if (isPointer!(stripped_T)) {

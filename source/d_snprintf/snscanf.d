@@ -672,7 +672,9 @@ void store_any_string(string value, ref va_list list) {
         type = va_get_array_elem_type(type);
         if (va_get_type!(char) is type || va_get_type!(byte) is type || va_get_type!(ubyte) is type) {
             char[] result = va_arg!(char[])(list);
-            result[0..value.length] = value[];
+            for (int i = 0; i < value.length; i++) {
+                result[i] = value[i];
+            }
             if (value.length < result.length) {
                 result[value.length] = '\0';
             }
@@ -682,7 +684,9 @@ void store_any_string(string value, ref va_list list) {
         type = va_get_pointer_target_type(type);
         if (va_get_type!(char) is type || va_get_type!(byte) is type || va_get_type!(ubyte) is type) {
             char[] result = va_arg!(char[])(list);
-            result[0..value.length] = value[];
+            for (int i = 0; i < value.length; i++) {
+                result[i] = value[i];
+            }
             result[value.length] = '\0';
             return;
         } else if (va_is_array(type)) { // char[]*, ubyte[]* or byte[]* -> store string
